@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Copyright (c) 2016 Leju Inc. All rights reserved.
+ * Copyright (c) 2016 thinklong89@gmail.com. All rights reserved.
  * 
  * Masterslave.php
  * 
- * @author     yulong8@leju.com
+ * @author     thinklong89@gmail.com
  */
 
 class Db_Masterslave extends Db_Abstract

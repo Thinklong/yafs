@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Copyright (c) 2016 Leju Inc. All rights reserved.
+ * Copyright (c) 2016 thinklong89@gmail.com. All rights reserved.
  * 
  * Bootstrap.php
  * 
- * @author     yulong8@leju.com
+ * @author     thinklong89@gmail.com
  * @desc 所有在Bootstrap类中, 以_init开头的方法, 都会被Yaf调用,
  * @see http://www.php.net/manual/en/class.yaf-bootstrap-abstract.php
  */

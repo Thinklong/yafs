@@ -4,7 +4,7 @@
  *
  * index.php
  *
- * @author     yulong8@leju.com
+ * @author     thinklong89@gmail.com
  */
 /**
  * 根目录

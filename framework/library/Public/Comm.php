@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Leju Inc. All rights reserved.
+ * Copyright (c) 2016 thinklong89@gmail.com. All rights reserved.
  * 
  * Comm.php
  * 公共基类静态方法

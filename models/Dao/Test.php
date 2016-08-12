@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Copyright (c) 2016 Leju Inc. All rights reserved.
+ * Copyright (c) 2016 thinklong89@gmail.com. All rights reserved.
  * Test.php
- * @auther: yulong8@leju.com
+ * @auther: thinklong89@gmail.com
  * @date:${date}
  * @create Time: ${time}
  * @version ${Id}
