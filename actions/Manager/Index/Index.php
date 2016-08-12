@@ -21,7 +21,7 @@ class IndexAction extends Base_Action
     {
         $params = (object) $this->filterParams();
         
-        
+        $i = 1;
         
         
     }
