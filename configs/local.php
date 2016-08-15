@@ -15,7 +15,27 @@ define('TIMESTAMP', substr(START_TIME, 0, 10));
 define('CURRENT_DATETIME', date("Y-m-d H:i:s", TIMESTAMP));
 
 // 项目环境
-define('APP_ENVRION', empty($_SERVER['SERVER_ROLE']) ? 'develop' : trim($_SERVER['SERVER_ROLE']));
+/**
+ * 项目环境 默认采用预定义变量 设置当前项目环境$_SERVER['SERVER_ROLE'] 分为 develop、beta、product。
+ * 如果使用预定义变量 必须严格使用以上变量名及值。
+ * 
+ * 由于服务器架构不同肯能你无法在web服务器上设置预定义变量，那么你可以使用另一种方法
+ * 域名中解析当前项目环境 
+ * 例如：dev.thinklong89.com、beta.thinklong89.com、thinklong89.com
+ * 分别为develop、beta、product环境。
+ * 
+ */
+isset($_SERVER['SERVER_ROLE']) && $_SERVER['SERVER_ROLE'] == 'develop' && define('APP_ENVRION', 'develop');
+isset($_SERVER['SERVER_ROLE']) && $_SERVER['SERVER_ROLE'] == 'beta' && define('APP_ENVRION', 'beta');
+isset($_SERVER['SERVER_ROLE']) && $_SERVER['SERVER_ROLE'] == 'product' && define('APP_ENVRION', 'product');
+
+if (!isset($_SERVER['SERVER_ROLE']))
+{
+    strpos($_SERVER['HTTP_HOST'], 'dev') !== false && define('APP_ENVRION', 'develop');
+    strpos($_SERVER['HTTP_HOST'], 'beta') !== false && define('APP_ENVRION', 'beta');
+    strpos($_SERVER['HTTP_HOST'], 'dev') === false && strpos($_SERVER['HTTP_HOST'], 'beta') === false && define('APP_ENVRION', 'product');
+
+}
 
 // 错误级别
 ('product' === APP_ENVRION) && (false !== ini_set('display_errors', 'Off')) && error_reporting(0);
