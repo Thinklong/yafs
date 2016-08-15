@@ -108,7 +108,7 @@ class AppHttp
             CURLOPT_TIMEOUT        => $params['timeout'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => $params['ssl'],
-            CURLOPT_USERAGENT      => 'm.leju.com PHP5 Client ver: ' . phpversion(),
+            CURLOPT_USERAGENT      => 'PHP5 Client ver: ' . phpversion(),
         );
 
         if ($params['headers']) {
