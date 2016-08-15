@@ -85,7 +85,7 @@ class Http_Request {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->_connection_time);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'm.leju.com PHP5 Client ver: ' . phpversion());
+        curl_setopt($ch, CURLOPT_USERAGENT, 'PHP5 Client ver: ' . phpversion());
         if ($this->_ms) {
             curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, 500);
