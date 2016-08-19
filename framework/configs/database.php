@@ -34,5 +34,14 @@ return [
             ],//Handle_Config::get("database.test.slave"),
         ],
     ],
+    'redis' => [
+        'adapter' => 'NoSQL_Redis',
+        'masterslave' => false,
+        'host' => $_SERVER['SINASRV_REDIS_HOST'],
+        'port' => $_SERVER['SINASRV_REDIS_PORT'],
+        'auth' => $_SERVER['SINASRV_REDIS_AUTH'],
+        'charset' => 'utf8',
+        'errmode' => 2,
+    ],
     
 ];

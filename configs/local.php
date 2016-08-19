@@ -54,6 +54,9 @@ file_exists(APP_PATH . 'framework/library/') and define('PATH_CUSTOM_FW_LIBRARY'
 define("PATH_FW_LIBRARY", defined("PATH_CUSTOM_FW_LIBRARY") ? PATH_CUSTOM_FW_LIBRARY : (rtrim($frameworkPath, '/\/') . DS));
 define("PATH_FW_CONFIG", dirname(rtrim(PATH_FW_LIBRARY, '/\/')) . DS . 'configs' . DS);
 
+// 设置tools目录路径
+define('PATH_FW_TOOLS', APP_PATH . 'framework/tools/');
+
 // 项目内配置
 defined("APP_CONFIG") or define('APP_CONFIG', dir(__FILE__) . DS);
 
