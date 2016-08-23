@@ -5,13 +5,14 @@
  *
  */
 
-class Sign_Base64 extends Sign
+class Sign_Base64 extends Sign_Sign
 {
-
-    protected function doSign($signStr, $privateKey)
+    
+    public function createSign($params, $key)
     {
-
-        return base64_encode($signStr);
-
+    }
+    
+    public function verifySign($params, $key, $sign)
+    {
     }
 } 

@@ -5,12 +5,14 @@
  *
  */
 
-class Sign_RSA extends Sign
+class Sign_RSA extends Sign_Sign
 {
-
-    protected function doSign($signStr, $privateKey)
+    
+    public function createSign($params, $key)
     {
-        echo $signStr . PHP_EOL;
-        return 'sign';
+    }
+    
+    public function verifySign($params, $key, $sign)
+    {
     }
 }

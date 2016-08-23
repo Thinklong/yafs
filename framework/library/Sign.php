@@ -1,12 +1,12 @@
 <?php
 /**
  * Sign
- * 签名验证基类
+ * 签名验证工厂类
  *
  *
  */
 
-abstract class Sign
+class Sign
 {
 
     const TYPE_RSA = 1;
@@ -16,7 +16,8 @@ abstract class Sign
     public static function factory($type = Sign::TYPE_HMAC_MD5)
     {
 
-        switch($type) {
+        switch($type)
+        {
             case self::TYPE_HMAC_MD5:
                 return new Sign_HMACMD5();
             case self::TYPE_RSA:
@@ -28,40 +29,5 @@ abstract class Sign
         }
 
     }
-
-
-     public function createSign($params, $privateKey) {
-
-         $signStr = $this->createSignString($params);
-
-         return $this->doSign($signStr, $privateKey);
-     }
-
-     public function verifySign($params, $privateKey, $sign) {
-
-         $signValue = $this->createSign($params, $privateKey);
-
-         return ($signValue === $sign);
-     }
-
-    protected function createSignString($params) {
-        if (!is_array($params)) {
-            return $params;
-        }
-
-        ksort($params);
-        reset($params);
-
-        $signPars = '';
-        while(list($k, $v) = each($params)){
-            if('' === $v) continue;
-            $signPars .= $k . '=' . $v . '&';
-        }
-        // 去掉最后一个 "&"
-        $signPars = substr($signPars, 0, strlen($signPars)-1);
-
-        return $signPars;
-    }
-    abstract protected function doSign($signStr, $privateKey);
-
-} 
+    
+}

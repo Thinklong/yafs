@@ -66,12 +66,15 @@ abstract class Base_Action extends Yaf_Action_Abstract
         {
             $this->response(Public_Error::ERR_PARAM, null, ['info' => $info]);
         }
-        //如果需要验证签名 或者 需要验证IP 可打开下面注释，或者用常量来控制当前项目是否需要开启
-        /*else if (!$this->verifySign())
+        else if ($this->isVerify())
         {
-            $curSign = ['sign_type' => $this->getParam('sign_type'), 'sign' => $this->getParam('sign')];
-            $this->response(Public_Error::ERR_SIGN, null, ['info' => $curSign]);
+            if (!$this->verifySign())
+            {
+                $curSign = ['sign' => $this->getParam('sign')];
+                $this->response(Public_Error::ERR_SIGN, null, ['info' => $curSign]);
+            }
         }
+        /*
         else if (!$this->verifyIp())
         {
             $clientIP = $clientIp = AppRequest::instance()->clientIp();
@@ -114,6 +117,77 @@ abstract class Base_Action extends Yaf_Action_Abstract
     }
     
     /**
+     * 是否要验签
+     * @return boolean
+     */
+    final protected function isVerify()
+    {
+        if (($white_list = $this->getWhiteList()) === true)
+        {
+            return true;
+        }
+        $controller = $this->getRequest()->getControllerName();
+        $action = $this->getRequest()->getActionName();
+        $ctl_tmp = '';
+        foreach (explode('_', $controller) as $key=>$val)
+        {
+            if ($ctl_tmp == '')
+            {
+                $ctl_tmp = $ctl = $val;
+            }
+            else 
+            {
+                $ctl_tmp = $ctl = "{$ctl_tmp}_{$val}";
+            }
+            //一层一层校验是否在白名单里
+            if (isset($white_list[$ctl]) && $controller != $ctl)
+            {
+                return false;
+            }
+            else if (isset($white_list[$ctl]) && $controller == $ctl)
+            {
+                return !in_array($action, $white_list[$ctl]);
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * 获取是否验签白名单
+     * @return boolean
+     */
+    final private function getWhiteList()
+    {
+        $cache_name = '_sign_white_list_config';
+        if (Yaf_Registry::has($cache_name))
+        {
+            return Yaf_Registry::get($cache_name);
+        }
+        $sign_config = Handle_Config::load('sign');
+        if (!isset($sign_config['whitelist']) || empty($sign_config['whitelist']))
+        {
+            return true;
+        }
+        $whitelist_tree = [];
+        foreach ($sign_config['whitelist'] as $key=>$val)
+        {
+            list($ctl, $act) = explode(':', $val);
+            if ($act === 'ALL')
+            {
+                $ctl_tree = true;
+            }
+            else
+            {
+                $ctl_tree = explode('|', $act);
+            }
+            $whitelist_tree[$ctl] = $ctl_tree;
+        }
+        Yaf_Registry::set($cache_name, $whitelist_tree);
+        return $whitelist_tree;
+    }
+    
+    
+    /**
      * 验证签名
      * 
      * @param array $data
@@ -121,22 +195,35 @@ abstract class Base_Action extends Yaf_Action_Abstract
      */
     final protected function verifySign(array $data = [])
     {
-        if (!isset($this->_validateParameters) || !$this->_validateParameters) {
+        if (!isset($this->_validateParameters) || !$this->_validateParameters)
+        {
             return true;
         }
         
         $pub_key = $this->getParam("pub_key");
-        $sign_type = $this->getParam("sign_type");
+        //$sign_type = $this->getParam("sign_type");
         $sign = $this->getParam("sign");
-        if (!$pub_key || !$sign_type || !$sign) {
+        if (!$pub_key || !$sign) {
             return false;
         }
 
         empty($data) and ($data = $this->getParams());
         $seckey = Handle_Sign::getPriKey($pub_key);
-
-        $data += array('pub_key' => $pub_key, 'sign_type' => $sign_type);
-        return Handle_Sign::verifySign($data, $sign_type, $sign, $seckey);
+        
+        //获取签名方式
+        $sign_config = Handle_Config::load('sign');
+        if (!isset($sign_config['sign_type']) || empty($sign_config['sign_type']))
+        {
+            return true;
+        }
+        $sign_type = '';
+        $ctl = $this->getRequest()->getControllerName();
+        if (isset($sign_config['sign_type'][$ctl]) && empty($sign_config['sign_type'][$ctl]))
+        {
+            $sign_type = $sign_config['sign_type'][$ctl];
+        }
+        $data += array('pub_key' => $pub_key);
+        return Handle_Sign::vSign($sign_type, $data, $sign, $seckey);
     }
     
     /**
@@ -234,12 +321,6 @@ abstract class Base_Action extends Yaf_Action_Abstract
     private function setTplParams()
     {
         $params = [
-            'css_path' => APP_PATH . 'public/css/',
-            'fonts_path' => APP_PATH . 'public/fonts/',
-            'img_path' => APP_PATH . 'public/img/',
-            'js_path' => APP_PATH . 'public/js/',
-            'static_path' => APP_PATH . 'public/static/',
-            'tpl_base_path' => APP_PATH . 'public/static/',
         ];
         $this->assign($params);
     }

@@ -45,8 +45,8 @@ abstract class Base_Test
         }
         
         empty($data['pub_key']) and $data['pub_key'] = $this->pubKey;
-        empty($data['sign_type']) and $data['sign_type'] = 'MD5';
-        empty($data['sign']) and $data['sign'] = Handle_Sign::createSign($data, $data['sign_type']);
+        //empty($data['sign_type']) and $data['sign_type'] = 'MD5';
+        empty($data['sign']) and $data['sign'] = Handle_Sign::createSign($data);
 
         if (preg_match("/^(http[s]?:\/\/\S+)/i", $api) && null !== $host) {
             $url = $api;

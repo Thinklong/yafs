@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Copyright (c) 2016 thinklong89@gmail.com. All rights reserved.
+ * Copyright (c) 2016 Leju Inc. All rights reserved.
  * 
  * Validate.php
  * 数据验证基类
  * 
- * @author     thinklong89@gmail.com
+ * @author     yulong8@leju.com
  */
 
 /**
@@ -313,7 +313,7 @@ class Validate
                     $flag = false;
                     if (is_callable($val)) {
                         $flag = call_user_func($val, $data);
-                    } 
+                    }
 //                    $flag = call_user_func(array(__CLASS__, $val), $data);
                     break;
 

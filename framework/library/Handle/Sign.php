@@ -45,86 +45,137 @@ class Handle_Sign
         return self::$_config;
     }
     
+    
+    /**
+     * 获取签名类型
+     * @param unknown $signType
+     * @return number
+     */
+    final private static function getSignType($signType)
+    {
+        switch ($signType)
+        {
+            case 'HMAC_MD5':
+                return Sign::TYPE_HMAC_MD5;
+            case 'MD5':
+                return Sign::TYPE_NORMAL_MD5;
+            case 'RSA':
+                return Sign::TYPE_RSA;
+            default:
+                return Sign::TYPE_HMAC_MD5;
+        }
+    }
+    
+    /**
+     * 创建签名
+     * @param string $sginType
+     * @param array $params
+     * @param string $pubKey
+     * @param string $priKey
+     * @return boolean|string
+     */
+    public static function cSign($signType, array $params, $pubKey = '', $priKey = '')
+    {
+        if (empty($params['pub_key']) && !$pubKey)
+        {
+            return false;
+        }
+        
+        $pubKey or ($pubKey = $params['pub_key']);
+        $config = self::_loadSecretConfig();
+        if (!$priKey)
+        {
+            if (!$pubKey || !isset($config[$pubKey]) || !($secret = $config[$pubKey]))
+            {
+                return false;
+            }
+        
+            if (!isset($secret[self::PRI_KEY]) || !($priKey = $secret[self::PRI_KEY]))
+            {
+                return false;
+            }
+        }
+        
+        $sign_obj = Sign::factory(self::getSignType($signType));
+        return $sign_obj->createSign($params, $priKey);
+    }
+    
+    
+    
+    /**
+     * 验证签名
+     * @param string $sginType
+     * @param array $params
+     * @param unknown $sign
+     * @param unknown $secKey
+     * @return boolean
+     */
+    public static function vSign($signType, array $params, $sign, $secKey)
+    {
+        if (!$secKey || !$params || !$sign)
+        {
+            return false;
+        }
+        $sign_obj = Sign::factory(self::getSignType($signType));
+        return $sign_obj->verifySign($params, $secKey, $sign);
+    }
+    
+    
+    
+    
+    
     /**
      * createSign
      * 生成签名串
      * 
-     * @param array $data
-     * @param string $algo
+     * @param array $params
      * @param string $pubkey
      * @return string|boolean
      */
-    public static function createSign(array $data, $algo = '', $pubkey = '', $prikey = '')
+    public static function createSign(array $params, $pubkey = '', $prikey = '')
     {
-        if (empty($data['pub_key']) && !$pubkey) {
+        if (empty($params['pub_key']) && !$pubkey)
+        {
             return false;
         }
         
-        $pubkey or ($pubkey = $data['pub_key']);
-        $algo or ($algo = $data['sign_type']);
+        $pubkey or ($pubkey = $params['pub_key']);
         
         $config = self::_loadSecretConfig();
-        if (!$prikey) {
-            if (!$pubkey || !$algo || !isset($config[$pubkey]) || !($secret = $config[$pubkey])) {
+        if (!$prikey)
+        {
+            if (!$pubkey || !isset($config[$pubkey]) || !($secret = $config[$pubkey]))
+            {
                 return false;
             }
 
-            if (!isset($secret[self::PRI_KEY]) || !($prikey = $secret[self::PRI_KEY])) {
+            if (!isset($secret[self::PRI_KEY]) || !($prikey = $secret[self::PRI_KEY]))
+            {
                 return false;
             }
         }
-
-        $data['sign_type'] = $algo;
-        unset($data['sign']);
-        ksort($data);
-        reset($data);
         
-        $string = $glue = '';
-        foreach ($data as $key => $value) {
-            if ('0' !== (string)$value && empty($value)) {
-                continue;
-            }
-            $string .= "{$glue}{$key}={$value}";
-            $glue = '&';
-        }
-
-        return hash_hmac($algo, $string, $prikey);
+        $sign = Sign::factory(Sign::TYPE_HMAC_MD5);
+        return $sign->createSign($params, $prikey);
     }
     
     /**
      * verifySign
      * 验证签名串
      * 
-     * @param array $data
-     * @param string $algo
+     * @param array $params
      * @param string $sign
      * @param string $secret
      * @return boolean
      */
-    public static function verifySign(array $data, $algo, $sign, $seckey)
+    public static function verifySign(array $params, $sign, $seckey)
     {
-        if (!$seckey || !$data || !$algo || !$sign) {
+        if (!$seckey || !$params || !$sign)
+        {
             return false;
         }
-        
-        unset($data['sign']);
-        
-        ksort($data);
-        reset($data);
-        
-        $string = $glue = '';
-        foreach ($data as $key => $value) {
-            if ('0' !== (string)$value && empty($value)) {
-                continue;
-            }
-
-            $string .= "{$glue}{$key}={$value}";
-            $glue = '&';
-        }
-
-        $sign = (string) $sign;
-
-        return $sign === hash_hmac($algo, $string, $seckey);
+        $sign = Sign::factory(Sign::TYPE_HMAC_MD5);
+        return $sign->verifySign($params, $seckey, $sign);
     }
     
     public static function getPubKey($pubkey)
