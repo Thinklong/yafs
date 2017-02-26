@@ -52,15 +52,15 @@ final class Base_Route implements Yaf_Route_Interface
         $module = $modules && in_array($parse[0], $modules) ? array_shift($parse) : null;
         $action = count($parse) > 1 ? array_pop($parse) : null;
         $controller = empty($parse) ? null : implode('_', $parse);
- 
+        
         // 将 a_d_c_d 之类的 action 接口转换为 abcd
         Yaf_Registry::set("_route_action", $action);
         $action and $action = str_replace('_', '', $action);
 
-        $module or $module = 'Index';
-        $controller or $controller = 'Index';
-        $action or $action = 'Index';
-
+        $module or $module = 'index';
+        $controller or $controller = 'manager_index';
+        $action or ($action = 'index') && (Yaf_Registry::set("_route_action", 'index'));
+        
         $request->setModuleName($module);
         $request->setControllerName($controller);
         $request->setActionName($action);

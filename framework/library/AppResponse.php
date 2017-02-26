@@ -203,7 +203,7 @@ class AppResponse
         header("Expires: $time");
     }
     
-    public static function response($errno, $result = null, $params = null)
+    public static function response($errno, $result = null, $params = null, $url = null)
     {
         $start = defined("START_TIME") ? START_TIME : AppRequest::instance()->getServer("REQUEST_TIME");
         $response = new stdClass();
@@ -240,6 +240,9 @@ class AppResponse
             case 'JSONP':
                 self::response_jsonp($response);
                 break;
+            case 'HTML':
+                self::response_html($response, $url);
+                break;
             default :
                 self::response_json($response);
         }
@@ -264,6 +267,18 @@ class AppResponse
         $func = AppRequest::instance()->getParam('jsoncallback');
         $func or $func = 'jsoncallback';
         echo $func, '(', json_encode($response), ')';
+    }
+    
+    private static function response_html($response, $url)
+    {
+        header('Content-Type: text/html');
+        
+        $smarty = new Smarty_Adapter(null, Yaf_Registry::get("config")->get("smarty"));
+        $response = Public_Comm::object_to_array($response);
+        isset($response['result']) && !empty($response['result']) && $response['result'] = var_export($response['result'], true);
+        $smarty->assign($response);
+        $smarty->assign('url', $url);
+        echo $smarty->render('layout/error.html');
     }
 
     private static function array2xml($response, $rootNodeName = null)

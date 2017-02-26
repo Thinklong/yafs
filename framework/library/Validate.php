@@ -217,6 +217,11 @@ class Validate
      */
     public static function string($value)
     {
+        $filter_req = "\\b(and|or)\\b.{1,6}?(=|>|<|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)";
+        if (preg_match("/".$filter_req."/is", $value)==1)
+        {
+            return false;
+        }
         return is_string($value);
     }
 

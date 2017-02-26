@@ -24,6 +24,9 @@ abstract class Sign_Sign
      */
     abstract public function verifySign($params, $key, $sign);
     
+    
+    abstract public function decrypt($sign, $key);
+    
     /**
      * 将参数转换成字符串
      * @param unknown $data
@@ -31,6 +34,10 @@ abstract class Sign_Sign
      */
     protected function toString($data)
     {
+        if (is_string($data))
+        {
+            return $data;
+        }
         unset($data['sign']);
         ksort($data);
         reset($data);

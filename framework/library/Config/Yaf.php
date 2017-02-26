@@ -10,21 +10,28 @@ class Config_Yaf
 
     public static function get($key)
     {
-        $arr = explode('.', $key);
+        $keys = explode('.', trim($key));
 
-        $config = Yaf_Registry::get('config');
-
-        if (strtolower($arr[0]) == 'config') {
-            array_shift($arr);
+        $configFile = APP_CONFIG . 'application.ini';
+        file_exists($configFile) or die("application configure is missing...");
+        
+        $iniObject = new Yaf_Config_Ini($configFile, APP_ENVRION);
+        $config = $iniObject->toArray();
+        unset($iniObject);
+        foreach ($keys as $key)
+        {
+            if (isset($config[$key]))
+            {
+                $config = $config[$key];
+            } else {
+                $config = null;
+            }
+            
+            if (null === $config)
+            {
+                break;
+            }
         }
-
-        foreach ($arr as $val) {
-            $config = $config->get($val);
-
-            if (!$config)
-                return null;
-        }
-
         return $config;
     }
 

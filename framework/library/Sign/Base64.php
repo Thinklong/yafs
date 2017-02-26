@@ -15,4 +15,7 @@ class Sign_Base64 extends Sign_Sign
     public function verifySign($params, $key, $sign)
     {
     }
+    public function decrypt($sign, $key)
+    {
+    }
 } 

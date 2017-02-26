@@ -1,26 +1,223 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Yafs</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="/img/favicon.png">
-    </head>
-    <body>
+<head>
+    <title>乐居买房&任务控制系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+    <link rel="shortcut icon" href="/img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
 
-        <!-- Header start -->
-        
-        <!-- Header ends -->
-        
-        
-        <!--{$content}-->
+    <!-- Main CSS -->
+    <link href="/css/main.css" rel="stylesheet" media="screen">
+
+    <!-- Font Awesome CSS -->
+    <link href="/fonts/font-awesome.css" rel="stylesheet">
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="/fonts/font-awesome.css">
+    <![endif]-->
+
+    <!-- Weather Icons CSS -->
+    <link href="/fonts/weather-icons.css" rel="stylesheet">
+
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="/fonts/font-awesome.css">
+    <![endif]-->
 
 
-        <footer>
-            <small>&#169; 2016 Yafs - All Rights Reserved.</small>
-        </footer>
+    <!-- HTML5 shiv and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
 
-        <!-- footer start -->
-        <!-- footer ends -->
 
-    </body>
+<!-- Header start -->
+<header class="navbar navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/manager/Index/index.html" class="navbar-brand">
+                <img src="/img/task.png" alt="Bluewave admin">
+            </a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav" >
+                <li>
+                    <a href="/manager/Index/index.html" >首页 </a>
+                </li>
+                <!--{foreach from=$composerList item=composer}-->
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><!--{$composer.cn_name}--> <b class="caret"></b></a>
+                    <!--{if isset($composer.controllers)}-->
+                    <ul class="dropdown-menu dropdown-menu-lg">
+                        <!--{foreach from=$composer.controllers item=controller}-->
+                        <li><a href="\<!--{$controller.url}-->"><!--{$controller.func_name_cn}--></a></li>
+                        <!--{/foreach}-->
+                    </ul>
+                    <!--{/if}-->
+                </li>
+                <!--{/foreach}-->
+
+            </ul>
+
+            <!-- Mini navigation start -->
+            <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-user"></i> <!--{$user_name}--> <b
+                            class="caret"></b></a>
+
+                    <!--{if $user_name != 'Not Login'}-->
+                    <ul class="dropdown-menu">
+                        <li><a href="/manager/user/updatepwd.html">修改密码</a></li>
+                        <li><a href="/manager/user/logout.html">退出</a></li>
+                    </ul>
+                    <!--{/if}-->
+                </li>
+            </ul>
+            <!-- Mini navigation end -->
+
+        </nav>
+    </div>
+</header>
+<!-- Header ends -->
+
+
+<!-- Dashboard Container starts -->
+<div class="dashboard-container">
+
+    <!-- Container starts -->
+    <div class="container">
+
+        <!-- Row Starts -->
+        <div class="row page-title">
+
+            <div class="col-lg-9 col-md-8 col-sm-9 col-xs-12" style="margin-top: 20px;">
+                <h2><!--{$bread_crumb.action}--></h2>
+                <ul class="breadcrumb">
+                    <li><!--{$bread_crumb.module}--></li>
+                    <li><!--{$bread_crumb.controller}--></li>
+                    <li><!--{$bread_crumb.action}--></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-3 hidden-sm hidden-xs">
+                <!-- Single button -->
+                <div class="btn-group hide">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                        Projects <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li><a href="#">Project #07</a></li>
+                        <li><a href="#">Project #18</a></li>
+                        <li><a href="#">Project #21</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Project #32</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Row Ends -->
+
+        <hr>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <!--{foreach from=$ctl_list item=ctl_info}-->
+                    <li class='<!--{if $smarty.cookies.active_action==$ctl_info.func_name|default:0}-->active<!--{/if}-->'><a
+                            href="/<!--{$ctl_name}-->/<!--{$ctl_info.func_name}-->.html" data-toggle="tab<!--{$ctl_info.id}-->">
+                        <!--{$ctl_info.func_name_cn}--></a></li>
+
+                    <!--{/foreach}-->
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="exampleUse">
+                        <!--{$content}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Container ends -->
+
+</div>
+<!-- Dashboard Container ends -->
+<!-- float -->
+<div id="dropper" class="modal fade" tabindex="-1" data-backdrop="static" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>提示</h4>
+            </div>
+            <div class="modal-body col-xs-offset-1 h5" id="body">
+
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning" class="close" data-dismiss="modal">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- float ends -->
+
+<footer>
+    <small>&#169; 2016 Leju Inc. - All Rights Reserved.</small>
+</footer>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.form.js"></script>
+
+<!-- Bootstrap Hover JS -->
+<script src="/js/bootstrap.hover.js"></script>
+
+<!-- Sparkline graphs -->
+<script src="/js/sparkline.js"></script>
+
+<!-- BS Validator JS -->
+<script src="/js/bsvalidator/bootstrapValidator.js"></script>
+
+<!-- Custom JS -->
+ <script src="/js/custom.js"></script>
+ <script src="/js/custom-forms.js"></script>
+<!-- DemandLoading -->
+<!--{if isset($_whether_load_charts) && $_whether_load_charts == true}-->
+<script src="/js/flot/jquery.flot.js"></script>
+<!--{/if}-->
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#dropper').on('shown.bs.modal', function () {
+            //显示浮层是调用
+        }).on('hidden.bs.modal', function () {
+            //隐藏浮层时调用
+        });
+        box = {};
+
+        box.alert = function (msg) {
+            $('#body').text(msg);
+            $('#dropper').modal('show');
+        }
+    });
+</script>
+</body>
 </html>

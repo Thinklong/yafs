@@ -10,7 +10,6 @@ class Sign_MD5 extends Sign_Sign
     
     /**
      * 创建MD5签名
-     * @see Sign_Sign::createSign()
      */
     public function createSign($params, $key)
     {
@@ -20,13 +19,16 @@ class Sign_MD5 extends Sign_Sign
     
     /**
      * 验证MD5签名
-     * @see Sign_Sign::verifySign()
      */
     public function verifySign($params, $key, $sign)
     {
         $string = $this->toString($params);
         $sign = (string) $sign;
         return $sign === md5($string . $key);
+    }
+    
+    public function decrypt($sign, $key)
+    {
     }
 
 } 

@@ -9,21 +9,26 @@
  *      获取此配置可以通过Config::get('config.domain.gateway.host') 或者Config::get('domain.gateway.host');
  *
  */
-class Config {
+class Config
+{
 
     private static $_config;
-    private function __construct() {
+    private function __construct()
+    {
         self::$_config = null;
     }
-    public static function get($key) {
-        if (!self::$_config) {
+    public static function get($key)
+    {
+        if (!self::$_config)
+        {
             self::$_config = self::getConfig();
         }
         
         return self::$_config->get($key);
     }
     
-    public static function getConfig() {
-        return new Config_Yaf(); 
+    public static function getConfig()
+    {
+        return new Config_Yaf();
     }
 }

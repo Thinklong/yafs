@@ -63,6 +63,9 @@ defined("APP_CONFIG") or define('APP_CONFIG', dir(__FILE__) . DS);
 // 日志记录路径
 define("PATH_APP_LOG", empty($_SERVER['PATH_LOG']) ? '/tmp/applog' : (rtrim($_SERVER['PATH_LOG'], '//\/') . DS . 'applog'));
 
+//编译模板路径
+define("TPL_CACHE_DIR", $_SERVER['SINASRV_CACHE_DIR']);
+
 // 默认分页
 define("DEFAULT_PAGE", 1);
 define("DEFAULT_PAGE_LIMIT", 50);

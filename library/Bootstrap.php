@@ -68,6 +68,16 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
     }
 
     /**
+     * 用户操作权限验证
+     * @param Yaf_Dispatcher $dispatcher
+     */
+    public function _initRights(Yaf_Dispatcher $dispatcher)
+    {
+        $rightsPlugin = new RightsPlugin();
+        $dispatcher->registerPlugin($rightsPlugin);
+    }
+
+    /**
      * 视图初始化
      * @param Yaf_Dispatcher $dispatcher
      */
@@ -82,8 +92,10 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
         }
         else 
         {
+            //var_dump($_SERVER['SINASRV_CACHE_DIR']);exit;
+            //var_dump(Yaf_Registry::get("config")->get("smarty"));exit;
             $view = new Smarty_Adapter(null, Yaf_Registry::get("config")->get("smarty"));
-            
+
             Yaf_Dispatcher::getInstance()->setView($view);
         }
     }
@@ -94,10 +106,18 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
      */
     public function _initLayout(Yaf_Dispatcher $dispatcher)
     {
-        $layout = new LayoutPlugin('Layout/layout.html');
-        
-        $dispatcher->registerPlugin($layout);
+        if ($dispatcher->getRequest()->isXmlHttpRequest())
+        {
+            $dispatcher->autoRender(false);
+        }
+        else
+        {
+            $layout = new LayoutPlugin('layout/layout.html');
+
+            $dispatcher->registerPlugin($layout);
+        }
     }
+    
     
     /**
      * 插件初始化

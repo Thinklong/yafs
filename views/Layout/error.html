@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>错误</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+        <link rel="shortcut icon" href="/img/favicon.png">
+        <!-- Bootstrap CSS -->
+        <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+
+        <!-- Main CSS -->
+        <link href="/css/main.css" rel="stylesheet" media="screen">
+
+        <!-- Font Awesome CSS -->
+        <link href="/fonts/font-awesome.css" rel="stylesheet">
+        <!--[if IE 7]>
+            <link rel="stylesheet" href="/fonts/font-awesome.css">
+        <![endif]-->
+
+        <!-- Weather Icons CSS -->
+        <link href="/fonts/weather-icons.css" rel="stylesheet">
+
+        <!--[if IE 7]>
+            <link rel="stylesheet" href="/fonts/font-awesome.css">
+        <![endif]-->
+
+
+        <!-- HTML5 shiv and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="/js/html5shiv.js"></script>
+            <script src="/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <div class="container">
+                <div id="page-wrapper">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="error center-align-text">
+                                <h1 class="error-heading">错误<span>!</span></h1>
+                                <h2 class="text-danger"><!--{$error}--></h2>
+                                <h3><!--{$msg}--></h3>
+                                <br/>
+                                <br/>
+                                <div class="h4"><!--{if !empty($result)}--><pre class="text-justify">Result:<br/><!--{$result}--></pre><!--{/if}--></div>
+                                <br/>
+                                <br/>
+                                <div>
+                                    <button class="btn btn-warning btn-lg col-md-8" type="button" onclick="int=window.clearInterval(int)">停止跳转</button>
+                                    <button class="btn btn-info btn-lg col-md-4"  type="button" href="<!--{if $url != ''}--><!--{$url}--><!--{else}-->javascript:history.go(-1);<!--{/if}-->">2秒后自动返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+        </div>
+
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <!--<script src="/js/jquery.js"></script>-->
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <!--<script src="/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript">
+        function delayAct()
+        {
+            var url = '<!--{$url}-->';
+            if(url == '')
+            {
+                history.back();
+            }
+            else
+            {
+                window.location.href = url;
+            }
+        }
+        var int = self.setInterval("delayAct()", 2000);
+        </script>
+    </body>
+</html>

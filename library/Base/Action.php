@@ -81,7 +81,7 @@ abstract class Base_Action extends Yaf_Action_Abstract
             $this->response(Public_Error::ERR_WHITE_LIST, null, ['ip' => $clientIP]);
         }*/
         
-        $this->setTplParams();
+        //$this->setTplParams();
     }
     
     /**
@@ -146,6 +146,10 @@ abstract class Base_Action extends Yaf_Action_Abstract
             }
             else if (isset($white_list[$ctl]) && $controller == $ctl)
             {
+                if ($white_list[$ctl] === true)
+                {
+                    return false;
+                }
                 return !in_array($action, $white_list[$ctl]);
             }
         }
@@ -285,10 +289,11 @@ abstract class Base_Action extends Yaf_Action_Abstract
      * @param type $errno
      * @param type $result
      * @param type $params
+     * @param type $url
      */
-    final protected function response($errno, $result = null, $params = null)
+    final protected function response($errno, $result = null, $params = null, $url = null)
     {
-        return AppResponse::response($errno, $result, $params);
+        return AppResponse::response($errno, $result, $params, $url);
     }
     
     

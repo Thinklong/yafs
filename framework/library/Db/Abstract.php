@@ -143,6 +143,8 @@ abstract class Db_Abstract
         $tags = explode(' ', $sql, 2);
         switch (strtoupper($tags[0])) {
             case 'SELECT':
+            case 'SHOW':
+            case 'EXPLAIN':
                 ($result = $this->fetchAll($type)) || ($result = array());
                 break;
             case 'INSERT':
